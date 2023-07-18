@@ -14,8 +14,7 @@ const Posts = () => {
             setBlogs(dData);
         }else{
             window.localStorage.setItem("dommydata", JSON.stringify(dommydata));
-            let pageAllData = [...dData].filter((ele,i) => i < 10)
-            setBlogs([...pageAllData])
+            setBlogs(dommydata);
         }
     }, [])
 
