@@ -9,7 +9,7 @@ const Posts = () => {
     const [isOpen, setIsOpen] = useState(false);
 
     useEffect(() => {
-        let dData = JSON.parse(window.localStorage.getItem('dommydata'));
+        let dData = JSON.parse(window.localStorage.getItem('dommydata') || '[]');
         if(dData.length > 0) {
             setBlogs(dData);
         }else{
