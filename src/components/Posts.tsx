@@ -1,5 +1,5 @@
 'use client'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useLayoutEffect, useState } from 'react'
 import {dommydata} from "@/data/domydata"
 import Link from 'next/link'
 import CraeteBlogModal from './modal/CraeteBlogModal'
@@ -7,26 +7,47 @@ import CraeteBlogModal from './modal/CraeteBlogModal'
 const Posts = () => {
     const [blogs, setBlogs] = useState([]);
     const [isOpen, setIsOpen] = useState(false);
+    const [allData, setAllData] = useState([])
+    const [pages, setpages] = useState([])
+
+
+    let paginate = (items:any, pageNumber:any, pageSize:any) => {
+        const startIndex = (pageNumber - 1) * pageSize;
+        return items.slice(startIndex, startIndex + pageSize);
+    }
+
 
     useEffect(() => {
         let dData = JSON.parse(window.localStorage.getItem('dommydata') || '[]');
         if(dData.length > 0) {
-            setBlogs(dData);
+            setAllData(dData)
+            let pagenateData =  paginate(dData, 1, 7);
+            setBlogs(pagenateData);
         }else{
             window.localStorage.setItem("dommydata", JSON.stringify(dommydata));
-            setBlogs(dommydata);
+            setAllData(dommydata)
+            let pagenateData =  paginate(dommydata, 1, 7);
+            setBlogs(pagenateData);
         }
     }, [])
 
-    // let pages;
-    // if(blogs.length > 0 ){
-    //     let total =  blogs.length;
-    //     let perPage = 10
-        
-    //     let pagesCount = Math.ceil(total / perPage);
-    //     if (pagesCount === 1) return null;
-    //     pages = Array.from({ length: pagesCount }, (_, i) => i + 1);
-    // }
+
+    useEffect(() => {
+        if(allData.length > 0 ){
+            let total =  allData.length;
+            let perPage = 10
+            let pagesCount = Math.ceil(total / perPage);
+            if (pagesCount === 1) return null;
+            let all_pages = Array.from({ length: pagesCount }, (_, i) => i + 1);
+            setpages(all_pages)
+        }
+    }, [allData])
+    
+
+    const HandlePagenate = (index:number) => {
+        let pagenateData =  paginate(allData, index+1, 7);
+        setBlogs(pagenateData);
+    }
 
 
     return (
@@ -60,15 +81,18 @@ const Posts = () => {
                 setBlogs={setBlogs}
             />
         }
-        {/* <div className='flex justify-center gap-2 mb-10 px-8'>
+        <div className='flex justify-center gap-2 mb-10 px-8'>
             {
                 pages && pages.length > 0 && pages.map((ele, i) => (
-                    <p className={`h-10 w-10 flex justify-center items-center bg-gray-400 rounded shadow-md cursor-pointer text-white`} key={i}>
+                    <button className={`h-10 w-10 flex justify-center items-center bg-gray-400 rounded shadow-md cursor-pointer text-white`} 
+                        key={i}
+                        onClick={() => HandlePagenate(i)}
+                    >
                         {ele}
-                    </p>
+                    </button>
                 ))
             }
-        </div> */}
+        </div>
         </>
     )
 }
