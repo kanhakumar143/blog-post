@@ -36,7 +36,6 @@ export default function CraeteBlogModal({ isOpen, setIsOpen,setBlogs, blogs }: T
         window.localStorage.setItem("dommydata", JSON.stringify(newCopy));
         setBlogs(newCopy);
         setIsOpen(false);
-
     }
 
     return (
@@ -88,10 +87,10 @@ export default function CraeteBlogModal({ isOpen, setIsOpen,setBlogs, blogs }: T
                                             onChange={(e) => {setCreateData({...createData,summery:e.target.value, summaryErr:false })}}
                                             />
                                         </div>
-                                        {/* <div>
+                                        <div>
                                             <p className="text-lg text-gray-500">Image</p>
                                             <input type="file" />
-                                        </div> */}
+                                        </div>
                                     </div>
 
                                     <div className="mt-4 gap-2 flex justify-end">
